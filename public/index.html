@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+    
+<h1>My API Widget</h1>
+<h2>Words widget</h2>
+
+<div x-data="{
+    sentence : '',
+    longestWord : '',
+    shortestWord : '',
+    wordCount : 0,
+    checkSentence() {
+        
+        axios.get(`/api/word_game?sentence=${this.sentence}`)
+             .then((result) => {
+              // console.log(result.data)
+
+              this.longestWord = result.data.longestWord;
+              this.shortestWord = result.data.shortestWord;
+              this.wordCount = result.data.sum;
+
+
+             })
+
+            
+    }
+
+
+}">
+
+<div>
+    <textarea x-model="sentence" name="" id="" cols="30" rows="5"></textarea>
+    <div>
+        <button x-on:click="checkSentence">Check sentence</button> 
+    </div>
+</div>
+
+<div>
+    Longest word: <span x-text="longestWord"></span>
+</div>
+
+<div>
+    Short word: <span x-text="shortestWord"></span>
+</div>
+
+<div>
+    Words length: <span x-text="wordCount"></span>
+</div>
+</div>
+
+<hr>
+<h2>Total phone bill</h2>
+
+<div x-data="{
+    data: '',
+    message: '',
+
+    calculate() {
+        axios.get(`/api/phonebill?data=${this.data}`)
+        .then(result => {
+            this.message = result.data.total;
+            alert(this.message);
+        })
+    }
+}">
+    <input type="text" id="data" x-model="data">
+    <button @click="calculate()">Total phone bill</button>
+    <div x-text="message"></div>
+</div>
+
+
+
+
+<hr>
+<h2>Enough Airtime</h2>
+
+<div class="block" x-data="{
+    usageString: '',
+    availableAirtime: '',
+    call: 1.88,
+    data: 12,
+    sms: 0.75,
+    calculate() {
+        axios.get(`/api/enoughAirtime?usageString=${this.usageString}`)
+        .then(result => {
+            this.availableAirtime = result.data; // Assuming the API returns the available airtime directly
+           // console.log(this.availableAirtime);
+            alert(this.availableAirtime);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+}">
+    <label for="usageString">Projected usage</label>
+    <input type="text" x-model="usageString">
+    
+    <label for="availableAirtime">Available Airtime</label>
+    <input type="text" x-model="availableAirtime" readonly>
+    
+    <button x-on:click="calculate()">Airtime usage</button>
+    <div x-text="availableAirtime"></div>
+
+</div>
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

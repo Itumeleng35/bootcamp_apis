@@ -1,0 +1,6 @@
+POST http://localhost:6007/api/phonebill/total
+Content-Type: application/json
+
+{
+  "bill": "call,sms,call"
+}
