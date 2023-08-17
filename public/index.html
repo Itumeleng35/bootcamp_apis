@@ -89,15 +89,18 @@
 <div class="block" x-data="{
     usageString: '',
     availableAirtime: '',
-    call: 1.88,
-    data: 12,
-    sms: 0.75,
+    total: 0,
     calculate() {
-        axios.get(`/api/enoughAirtime?usageString=${this.usageString}`)
-        .then(result => {
-            this.availableAirtime = result.data; // Assuming the API returns the available airtime directly
-           // console.log(this.availableAirtime);
-            alert(this.availableAirtime);
+        const usage = this.usageString;
+        const available = parseFloat(this.availableAirtime);
+
+        axios.post('/api/enoughAirtime', {
+            usageString: usage,
+            airtime: available
+        })
+        .then(response => {
+            const airtimeResult = response.data.airtime;
+            this.total= airtimeResult;
         })
         .catch(error => {
             console.error('Error fetching data:', error);
@@ -108,11 +111,10 @@
     <input type="text" x-model="usageString">
     
     <label for="availableAirtime">Available Airtime</label>
-    <input type="text" x-model="availableAirtime" readonly>
+    <input type="number" x-model="availableAirtime">
     
     <button x-on:click="calculate()">Airtime usage</button>
-    <div x-text="availableAirtime"></div>
-
+    <div x-text="'Result: ' + total"></div>
 </div>
 
 

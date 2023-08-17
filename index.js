@@ -8,6 +8,8 @@ import enoughAirtime from './bootcamp/enoughAirtime.js';
 const app = express();
 
 app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // data comes in when we make a request
 app.get('/api/word_game', function(req, res){
@@ -55,28 +57,66 @@ app.post('/api/phonebill/total', function(req, res) {
   
 })
 
-app.get('/api/enoughAirtime', function(req, res) {
-  const usageString = req.query.usageString;
+// function enoughAirtime(usageString) {
+//   const usageArray = usageString.split(',');
+//   const total = usageArray.length * 2.5; // Assuming each usage costs 2.5 units
+//   return total;
+// }
 
-  if (!usageString) {
-    res.json ({
-      error : 'Please insert string'
-    })
-  }
-
-res.json ({
-  'total' : enoughAirtime(usage)
-});
-});
-
-app.post('/api/enoughAirtime/total', function(req, res) {
+app.get('/api/enoughAirtime', (req, res) => {
   const usageString = req.body.usageString;
 
-  res.json ({
-    message: 'success',
-    'total': enoughAirtime(usage)
-  })
+  if (!usageString) {
+      return res.json({
+          error: 'Please provide a usage string'
+      });
+  }
+
+  const total = enoughAirtime(usageString);
+  console.log({total});
+  res.json({
+      total
+  });
 });
+
+app.post('/api/enoughAirtime', (req, res) => {
+  console.log(req.body , req.query, req.params)
+
+  const usageString = req.body.usageString;
+  const airtime = req.body.airtime;
+
+  if (!usageString) {
+      return res.json({
+          error: 'Please provide a usage string'
+      });
+  }
+
+  // You can calculate the total airtime usage here if needed
+  // For now, I'll just echo the provided airtime value
+  const total = enoughAirtime(usageString, Number(airtime));
+  console.log({total});
+  res.json({
+      airtime: total
+  });
+});
+
+app.post('/api/enoughAirtime/total', (req, res) => {
+  const usageString = req.body.usageString;
+
+  if (!usageString) {
+      return res.json({
+          error: 'Please provide a usage string'
+      });
+  }
+
+  const total = enoughAirtime(usageString);
+  
+  res.json({
+      message: 'success',
+      total
+  });
+});
+  
 
 
 

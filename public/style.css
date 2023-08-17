@@ -1,4 +1,8 @@
 h1{
-    border-radius: 1em;
-    background-color: orange;
+    border: 1em;
+    background-color: pink;
+}
+
+body {
+    background-color: lightgreen;
 }

@@ -4,3 +4,17 @@ Content-Type: application/json
 {
   "bill": "call,sms,call"
 }
+
+
+###
+POST http://localhost:6007/api/enoughAirtime
+Content-Type: application/json
+
+{
+  "usageString": "call,sms,call",
+  "airtime": 90
+}
+
+###
+
+GET  http://localhost:6007/api/enoughAirtime?usageString='call, sms'&airtime=10
